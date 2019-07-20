@@ -1,0 +1,49 @@
+############################
+# General Setup
+############################
+
+APP_PATH=./path_my_app
+APP_MNT_PATH=/where_to_mount
+
+PHP_INTERPRETER=php-fpm
+
+PHP_IDE_CONFIG=serverName=placeholder
+
+############################
+# Containers Customization
+############################
+
+### WORKSPACE ##########################################################################################################
+
+WORKSPACE_PUID=1000
+WORKSPACE_PGID=1000
+WORKSPACE_TIMEZONE=UTC
+
+### POSTGRES ##########################################################################################################
+
+DB_USERNAME=placeholder
+DB_PASSWORD=placeholder
+WORKSPACE_TIMEZONE=UTC
+
+### NGINX ##############################################################################################################
+
+NGINX_HOST_HTTP_PORT=80
+NGINX_HOST_HTTPS_PORT=443
+NGINX_HOST_LOG_PATH=./nginx/logs/
+NGINX_SITES_PATH=./nginx/sites/
+
+### DOCKER-SYNC ################################################################################################
+
+DOCKER_SYNC_STRATEGY=native_osx
+
+############################
+# Miscellaneous
+############################
+
+# Replace with your Docker Host IP (will be appended to /etc/hosts)
+
+DOCKER_HOST_IP=10.0.75.1
+
+# Fix for windows users to make sure the application path works.
+
+COMPOSE_CONVERT_WINDOWS_PATHS=1
