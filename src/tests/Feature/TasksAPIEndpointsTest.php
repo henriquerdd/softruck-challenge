@@ -101,6 +101,31 @@ class TasksAPIEndpointsTest extends TestCase
             ]);
     }
 
+    public function testUpdateTask()
+    {
+        $taskData = [
+            'name' => 'Test task 1',
+            'description' => 'Just checking if it works'
+        ];
+
+        $response = $this->json('POST', '/api/tasks', $taskData);
+        
+        $response->assertStatus(self::SUCCESS_CREATE_STATUS);
+
+        $responseBody = json_decode($response->getContent(), true);
+
+        $updatedTaskData = [
+            'status' => 'ACCEPTED'
+        ];
+
+        $response = $this->json('PATCH', '/api' . $responseBody['self'], $updatedTaskData);
+
+        $response
+            ->assertStatus(self::DEFAULT_SUCCESS_STATUS)
+            ->assertJson($taskData + $updatedTaskData)
+            ->assertJsonStructure($this->getTaskStructure());
+    }
+
     private function getTaskStructure()
     {
         return [
