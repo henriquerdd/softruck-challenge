@@ -77,9 +77,13 @@ class TasksAPIController extends Controller
             $task['description'] = $input['description'] ?? $task['description'];
             $task['status'] = $input['status'] ?? $task['status'];
 
-            $task->save();
+            $result = $task->save();
 
-            return response()->json(new TasksResource($task));
+            if ($result) {
+                return response()->json(new TasksResource($task));
+            } else {
+                return response("Could not update task", 500);
+            }
 
         } catch (\Throwable $th) {
             Log::error(exception_msg($th));
