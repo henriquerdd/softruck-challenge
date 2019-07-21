@@ -72,6 +72,35 @@ class TasksAPIEndpointsTest extends TestCase
         $response->assertStatus(self::NOT_FOUND_STATUS);
     }
 
+    public function testRetrieveMultipleTasks()
+    {
+        $taskData = [
+            'name' => 'Test task 1',
+            'description' => 'Just checking if it works'
+        ];
+
+        $response = $this->json('POST', '/api/tasks', $taskData);
+        
+        $response->assertStatus(self::SUCCESS_CREATE_STATUS);
+
+        $taskData = [
+            'name' => 'Test task 2',
+            'description' => 'Just checking if it works again'
+        ];
+
+        $response = $this->json('POST', '/api/tasks', $taskData);
+        
+        $response->assertStatus(self::SUCCESS_CREATE_STATUS);
+
+        $response = $this->get('/api/tasks');
+
+        $response
+            ->assertStatus(self::DEFAULT_SUCCESS_STATUS)
+            ->assertJsonStructure([
+                '*' => $this->getTaskStructure()
+            ]);
+    }
+
     private function getTaskStructure()
     {
         return [
