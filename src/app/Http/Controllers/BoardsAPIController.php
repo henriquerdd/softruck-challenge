@@ -25,10 +25,11 @@ class BoardsAPIController extends Controller
         try {
 
             $input = $request->all();
-            $boardTasks = $this->getTaskIds($input['tasks']);
+            $inputTasks = $input['tasks'] ?? [];
+            $boardTasks = $this->getTaskIds($inputTasks);
 
-            if (count($boardTasks) != count($input['tasks'])) {
-                return response("Of the given " . count($input['tasks']) . " only " . count($boardTasks) . " could be found", 400);
+            if (count($boardTasks) != count($inputTasks)) {
+                return response("Of the given " . count($inputTasks) . " only " . count($boardTasks) . " could be found", 400);
             }
 
             $model = new Boards([
@@ -42,7 +43,7 @@ class BoardsAPIController extends Controller
                 return response("Could not create board", 500);
             }
 
-            $model->tasks()->sync($boardTasks);
+            $model->tasks()->sync($boardTasks);            
             
             return response()->json(new BoardsResource($model), 201);
 
@@ -80,15 +81,15 @@ class BoardsAPIController extends Controller
             }
 
             $input = $request->all();
-            $boardTasks = $this->getTaskIds($input['tasks']);
+            $inputTasks = $input['tasks'] ?? [];
+            $boardTasks = $this->getTaskIds($inputTasks);
 
-            if (count($boardTasks) != count($input['tasks'])) {
-                return response("Of the given " . count($input['tasks']) . " only " . count($boardTasks) . " could be found", 400);
+            if (count($boardTasks) != count($inputTasks)) {
+                return response("Of the given " . count($inputTasks) . " only " . count($boardTasks) . " could be found", 400);
             }
 
             $board['name'] = $input['name'] ?? $board['name'];
             $board['description'] = $input['description'] ?? $board['description'];
-            $board['status'] = $input['status'] ?? $board['status'];
 
             $result = $board->save();
 
@@ -138,7 +139,7 @@ class BoardsAPIController extends Controller
 
         $boardTasks = $board->tasks
             ->map(function ($task) {
-                return new TasksResource($task)
+                return new TasksResource($task);
             });
 
         return response()->json($boardTasks);
@@ -150,22 +151,22 @@ class BoardsAPIController extends Controller
             ->map(function ($reference) {
 
                 $match = [];
-                if (!preg_match('/\/tasks\/(.*)/', $reference, $match)) {
+                if (!preg_match('/\/tasks\/([0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12})/i', $reference, $match)) {
                     return null;
                 }
-
                 return $match[1];
             })
             ->filter()
             ->toArray();
         
-        if (empty($taskReferences) ! count($taskUuids)) {
+        if (count($taskReferences) != count($taskUuids)) {
             return [];
         }
 
         return Tasks::whereIn('uuid', $taskUuids)
             ->select(['id'])
             ->get()
+            ->pluck('id')
             ->toArray();
     }
 }
