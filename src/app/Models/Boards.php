@@ -11,6 +11,11 @@ class Boards extends BaseModel
     const CREATED_AT = 'createdAt';
     const UPDATED_AT = 'updatedAt';
 
+    protected $fillable = [
+        'name',
+        'description'
+    ];
+
     public function tasks()
     {
         return $this->belongsToMany(\App\Models\Tasks::class,  'board_tasks', 'boardId', 'taskId');
