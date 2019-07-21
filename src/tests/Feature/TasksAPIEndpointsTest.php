@@ -126,6 +126,38 @@ class TasksAPIEndpointsTest extends TestCase
             ->assertJsonStructure($this->getTaskStructure());
     }
 
+    public function testUpdateTaskWithInvalidData()
+    {
+        $taskData = [
+            'name' => 'Test task 1',
+            'description' => 'Just checking if it works'
+        ];
+
+        $response = $this->json('POST', '/api/tasks', $taskData);
+        
+        $response->assertStatus(self::SUCCESS_CREATE_STATUS);
+
+        $responseBody = json_decode($response->getContent(), true);
+
+        $updatedTaskData = [
+            'status' => 'UNDEFINED_STATUS'
+        ];
+
+        $response = $this->json('PATCH', '/api' . $responseBody['self'], $updatedTaskData);
+
+        $response
+            ->assertStatus(self::VALIDATION_FAILED_STATUS);   
+
+        $updatedTaskData = [
+            'name' => null
+        ];
+
+        $response = $this->json('PATCH', '/api' . $responseBody['self'], $updatedTaskData);
+
+        $response
+            ->assertStatus(self::VALIDATION_FAILED_STATUS);   
+    }
+
     private function getTaskStructure()
     {
         return [
