@@ -51,3 +51,5 @@ USER ${NON_ROOT_USER}
 
 # Set default work directory
 WORKDIR ${APP_MNT_PATH}
+
+ENTRYPOINT [ "sh" ]
