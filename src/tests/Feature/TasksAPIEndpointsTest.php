@@ -13,6 +13,7 @@ class TasksAPIEndpointsTest extends TestCase
 
     const DEFAULT_SUCCESS_STATUS = 200;
     const SUCCESS_CREATE_STATUS = 201;
+    const SUCCESS_DELETE_STATUS = 204;
     const VALIDATION_FAILED_STATUS = 422;
     const NOT_FOUND_STATUS = 404;
 
@@ -156,6 +157,25 @@ class TasksAPIEndpointsTest extends TestCase
 
         $response
             ->assertStatus(self::VALIDATION_FAILED_STATUS);   
+    }
+
+    public function testTaskDestruction()
+    {
+        $taskData = [
+            'name' => 'Test task 1',
+            'description' => 'Just checking if it works'
+        ];
+
+        $response = $this->json('POST', '/api/tasks', $taskData);
+        
+        $response->assertStatus(self::SUCCESS_CREATE_STATUS);
+
+        $responseBody = json_decode($response->getContent(), true);
+
+        $response = $this->delete('/api' . $responseBody['self']);
+
+        $response
+            ->assertStatus(self::SUCCESS_DELETE_STATUS);
     }
 
     private function getTaskStructure()
