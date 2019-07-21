@@ -123,7 +123,7 @@ class TasksAPIEndpointsTest extends TestCase
 
         $response
             ->assertStatus(self::DEFAULT_SUCCESS_STATUS)
-            ->assertJson($taskData + $updatedTaskData)
+            ->assertJson($updatedTaskData + $taskData)
             ->assertJsonStructure($this->getTaskStructure());
     }
 
