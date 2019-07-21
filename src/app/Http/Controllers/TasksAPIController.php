@@ -86,4 +86,24 @@ class TasksAPIController extends Controller
             return response("Something went wrong! Try again later.", 500);
         }
     }
+
+    public function destroy($uuid)
+    {
+        try {
+
+            $task = Tasks::where('uuid', '=', $uuid)->first();
+
+            if (empty($task)) {
+                return response('Task not found', 404);    
+            }
+
+            $task->delete();
+
+            return response('', 204);
+
+        } catch (\Throwable $th) {
+            Log::error(exception_msg($th));
+            return response("Something went wrong! Try again later.", 500);
+        }
+    }
 }
