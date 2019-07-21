@@ -23,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        require_once base_path('app/Helpers/Simple.php');
     }
 }
