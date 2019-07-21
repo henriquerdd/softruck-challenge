@@ -80,7 +80,7 @@ services:
         - frontend
         - backend
 
-### MongoDB Container ##################################
+### Posgres Container ##################################
 
     svc-postgres:
       image: postgres
@@ -90,7 +90,7 @@ services:
         - POSTGRES_PASSWORD=${DB_PASSWORD}
         - POSTGRES_DB=${DB_DATABASE}
       ports:
-        - "3306:3306"
+        - "5432:5432"
       networks:
         - backend
 
