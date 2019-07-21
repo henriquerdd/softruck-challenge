@@ -14,8 +14,6 @@ class Tasks extends BaseModel
     protected $fillable = [
         'name',
         'description',
-        'createdAt',
-        'updatedAt',
         'status'
     ];
 
