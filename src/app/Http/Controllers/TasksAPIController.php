@@ -6,6 +6,7 @@ use Log;
 use App\Models\Tasks;
 use App\Http\Resources\Tasks as TasksResource;
 use App\Http\Requests\CreateTasksRequest;
+use App\Http\Requests\UpdateTasksRequest;
 
 class TasksAPIController extends Controller
 {
@@ -54,6 +55,32 @@ class TasksAPIController extends Controller
             }
 
             return response()->json(new TasksResource($task));
+        } catch (\Throwable $th) {
+            Log::error(exception_msg($th));
+            return response("Something went wrong! Try again later.", 500);
+        }
+    }
+
+    public function update($uuid, UpdateTasksRequest $request)
+    {
+        try {
+
+            $task = Tasks::where('uuid', '=', $uuid)->first();
+
+            if (empty($task)) {
+                return response('Task not found', 404);    
+            }
+
+            $input = $request->all();
+
+            $task['name'] = $input['name'] ?? $task['name'];
+            $task['description'] = $input['description'] ?? $task['description'];
+            $task['status'] = $input['status'] ?? $task['status'];
+
+            $task->save();
+
+            return response()->json(new TasksResource($task));
+
         } catch (\Throwable $th) {
             Log::error(exception_msg($th));
             return response("Something went wrong! Try again later.", 500);
