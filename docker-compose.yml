@@ -94,6 +94,19 @@ services:
       networks:
         - backend
 
+### Node Container ##########################################
+
+    svc-node:
+      build:
+        context: ./node
+        args:
+          - APP_MNT_PATH=${APP_MNT_PATH}
+      image: softruck_challenge_node
+      volumes_from:
+        - app
+      networks:
+        - backend
+
 networks:
   frontend:
     driver: "bridge"
