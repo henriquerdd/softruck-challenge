@@ -11,6 +11,8 @@
     </section>
     <div class="content">
         <div class="clearfix"></div>
+        @include('flash::message')
+        <div class="clearfix"></div>
         <div class="box box-primary">
             <div class="box-body">
                 <div id='tasks_list'></div>            
@@ -18,3 +20,7 @@
         </div>
     </div>
 @stop
+
+@push('js')
+    <script type="text/javascript" src="{{ asset('js/components/tasks/tasksList.js') }}"></script>
+@endpush
