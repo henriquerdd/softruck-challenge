@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import { MDBDataTable } from 'mdbreact';
+import ReactDOM from 'react-dom';
+import ApiClient from '../../apiClient';
 
 const datatableColumns = [
+    {
+        label: 'Ações',
+        field: 'actions',
+        width: 100,
+    },
     {
         label: 'Nome',
         field: 'name',
@@ -41,21 +48,18 @@ function formatStatusColumn(status) {
     switch (status) {
         case 'PENDING':
             color = 'text-red';
-            icon = 'fa fa-edit';
+            icon = 'fa fa-square-o';
             text = " Pendente";
-            //return "<span class='text-red'><i class='fa fa-edit'></i> Pendente</span>";
         break;
         case 'ACCEPTED':
             color = 'text-blue';
-            icon = 'fa fa-edit';
+            icon = 'fa fa-dot-circle-o';
             text = " Aceita";
-            //return "<span class='text-orange'><i class='fa fa-edit'></i> Aceita</span>";
         break;
         case 'FINISHED':
             color = 'text-green';
-            icon = 'fa fa-edit';
+            icon = 'fa fa-check-square-o';
             text = " Terminada";
-            //return "<span class='text-green'><i class='fa fa-edit'></i> Terminada</span>";
         break;
     }
 
@@ -79,45 +83,91 @@ export default class TasksList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tasks: [],
             columns: datatableColumns,
             rows: []
         };
+        this.deleteTask = this.deleteTask.bind(this);
     }
 
-    componentDidMount() {
+    deleteTask(taskReference) {
 
+        this.props.apiClient.deleteTask(taskReference)
+        .then((result) => {
+
+            let tasks = this.state.tasks.filter((task) => task['self'] != taskReference);
+
+            this.setState({
+                tasks: tasks,
+                rows: this.makeRows(tasks)
+            })
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+    }
+
+    getAvailableActions(row) {
+
+        return (
+            <div className="btn-group">
+                <a className="btn btn-default" href={`${row['self']}/edit`}><i className="fa fa-edit"></i></a>
+                <button className="btn btn-danger" onClick={(e) => this.deleteTask(row['self'])}><i className="fa fa-trash"></i></button>
+            </div>
+        );
+    }
+    
+
+    showTasks() {
+        
         this.props.apiClient.getAllTasks()
         .then((result) => {
 
-            let data = result.data.map((row) => {
-
-                return {
-                    name: row['name'],
-                    status: formatStatusColumn(row['status']),
-                    createdAt: formatDate(row['createdAt']),
-                    updatedAt: formatDate(row['updatedAt']),
-                    description: row['description']
-                };
-            });
-
             this.setState({
-                rows: data
+                tasks: result.data,
+                rows: this.makeRows(result.data)
             });
         })
         .catch((err) => {
             console.error(err);
-        })
+        });
+    }
+
+    makeRows(tasks) {
+
+        return tasks.map((task) => {
+
+            return {
+                actions: this.getAvailableActions(task),
+                name: task['name'],
+                status: formatStatusColumn(task['status']),
+                createdAt: formatDate(task['createdAt']),
+                updatedAt: formatDate(task['updatedAt']),
+                description: task['description']
+            };
+        });
+    }
+
+    componentDidMount() {
+        this.showTasks();
     }
 
     render() {
         return (
-            <MDBDataTable
-              striped
-              bordered
-              hover
-              responsive
-              data={{columns: this.state.columns, rows: this.state.rows}}
-            />
+            <div>
+                <MDBDataTable
+                    striped
+                    bordered
+                    hover
+                    responsive
+                    data={{columns: this.state.columns, rows: this.state.rows}}
+                />
+            </div>
         );
     }
+}
+
+if (document.getElementById('tasks_list')) {
+    let apiClient = new ApiClient();
+    ReactDOM.render(<TasksList apiClient={apiClient} />, document.getElementById('tasks_list'));
 }

@@ -3,13 +3,19 @@ import ReactDOM from 'react-dom';
 import Display from '../utils/display';
 import ApiClient from '../../apiClient';
 
-function TaskCreateInputs(props) {
+function TaskUpdateInputs(props) {
     
     return (
         <div className="row">
             <div className="form-group col-sm-6">
                 <label htmlFor="name"> Nome: </label>
                 <input type="text" name="name" value={props.name} onChange={(e) => props.onInputChange("name", e.currentTarget.value)} className="form-control" />
+            </div>
+            <div className="form-group col-sm-6">
+                <label htmlFor="status"> Estado: </label> <br />
+                <select name="status" defaultValue={props.status} onChange={(e) => props.onInputChange("status", e.currentTarget.value)}>
+                    {props.availableStatus.map((status) =>  <option value={status.value} key={status.value}>{status.display}</option>)}
+                </select>
             </div>
             <div className="form-group col-sm-12">
                 <label htmlFor="description">Descrição</label>
@@ -23,13 +29,12 @@ function TaskCreateInputs(props) {
     );
 }
 
-export default class TasksCreator extends Component {
+export default class TasksChanger extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            name: "",
-            description: "",
+            task: props.task,
             showMessage: false,
             success: false,
             message: ""
@@ -38,34 +43,28 @@ export default class TasksCreator extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    creatTask(name, description) {
+    updateTask(task) {
 
-        this.props.apiClient.createTask({
-            'name': name,
-            'description': description
-        })
+        this.props.apiClient.updateTask(task)
         .then((result) => {
             
             this.setState({
-                name: "",
-                description: "",
+                task: result.data,
                 showMessage: true,
                 success: true,
-                message: "Tarefa criada com sucesso!"
+                message: "Tarefa atualizada com sucesso!"
             });
 
             setTimeout(() => {
-                this.setState({
-                    showMessage: false
-                });
-            }, 3000);
+                window.location = '/tasks';
+            }, 1500);
         })
         .catch((err) => {
             
             this.setState({
                 showMessage: true,
                 success: false,
-                message: "Ocorreu um erro ao tentar criar sua tarefa. Tente novamente mais tarde"
+                message: "Ocorreu um erro ao tentar atualizar sua tarefa. Tente novamente mais tarde"
             });
             console.log(err);
         });
@@ -73,14 +72,18 @@ export default class TasksCreator extends Component {
 
     handleInputChange(name, value) {
         
-        let newState = {};
-        newState[name] = value;
-        this.setState(newState);
+        let task = this.state.task;
+
+        task[name] = value;
+
+        this.setState({
+            task: task
+        });
     }
 
     handleSubmit() {
 
-        if (!this.state.name) {
+        if (!this.state.task.name) {
             
             this.setState({
                 showMessage: true,
@@ -88,21 +91,46 @@ export default class TasksCreator extends Component {
                 message: "O campo nome é obrigatório"
             });
         } else {
-            this.creatTask(this.state.name, this.state.description);
+            this.updateTask(this.state.task);
         }
+    }
+
+    getAvailableStatus() {
+        
+        return [
+            {
+                value: 'PENDING',
+                display: 'Pendente'
+            },
+            {
+                value: 'ACCEPTED',
+                display: 'Aceita'
+            },
+            {
+                value: 'FINISHED',
+                display: 'Terminada'
+            }
+        ];
     }
 
     render() {
         return (
             <div>
                 <Display showMessage={this.state.showMessage} success={this.state.success} message={this.state.message} />
-                <TaskCreateInputs name={this.state.name} description={this.state.description} onInputChange={this.handleInputChange} onSubmit={this.handleSubmit} />
+                <TaskUpdateInputs
+                    name={this.state.task.name}
+                    description={this.state.task.description}
+                    status={this.state.task.status}
+                    onInputChange={this.handleInputChange}
+                    onSubmit={this.handleSubmit}
+                    availableStatus={this.getAvailableStatus()}
+                />
             </div>
         );
     }
 }
 
-if (document.getElementById('tasks_create')) {
+if (document.getElementById('tasks_update')) {
     let apiClient = new ApiClient();
-    ReactDOM.render(<TasksCreator apiClient={apiClient} />, document.getElementById('tasks_create'));
+    ReactDOM.render(<TasksChanger apiClient={apiClient} task={task} />, document.getElementById('tasks_update'));
 }
