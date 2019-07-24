@@ -52,4 +52,8 @@ export default class ApiClient {
     deleteBoard(boardRefence) {
         return this.httpClient.delete('/api' + boardRefence);
     }
+
+    getBoardTasks(boardRefence) {
+        return this.httpClient.get('/api' + boardRefence + '/tasks');
+    }
 }
