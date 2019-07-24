@@ -1,21 +1,35 @@
 
+const API_BASE_URL = 'http://localhost';
 
+var axios = require('axios');
 
 export default class ApiClient {
-
-    constructor(baseUrl, headers) {
+    
+    constructor() {
         this.httpClient = axios.create({
-            baseUrl: baseUrl,
+            baseUrl: API_BASE_URL,
             timeout: 3000,
-            headers: headers
+            headers: {'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')}
         });
+    }
+
+    getAllTasks() {
+        return this.httpClient.get('/api/tasks');
+    }
+
+    getTask(taskReference) {
+        return this.httpClient.get('/api' + taskReference);
     }
 
     createTask(task) {
         return this.httpClient.post('/api/tasks', task);
     }
 
-    getAllTasks() {
-        return this.httpClient.get('/api/tasks');
+    updateTask(task) {
+        return this.httpClient.patch('/api' + task['self'], task);
+    }
+
+    deleteTask(taskReference) {
+        return this.httpClient.delete('/api' + taskReference);
     }
 }
