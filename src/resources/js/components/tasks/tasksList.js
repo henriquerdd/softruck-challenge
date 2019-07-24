@@ -83,9 +83,9 @@ export default class TasksList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tasks: [],
+            tasks: props.tasks,
             columns: datatableColumns,
-            rows: []
+            rows: this.makeRows(props.tasks)
         };
         this.deleteTask = this.deleteTask.bind(this);
     }
@@ -116,22 +116,6 @@ export default class TasksList extends Component {
             </div>
         );
     }
-    
-
-    showTasks() {
-        
-        this.props.apiClient.getAllTasks()
-        .then((result) => {
-
-            this.setState({
-                tasks: result.data,
-                rows: this.makeRows(result.data)
-            });
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-    }
 
     makeRows(tasks) {
 
@@ -146,10 +130,6 @@ export default class TasksList extends Component {
                 description: task['description']
             };
         });
-    }
-
-    componentDidMount() {
-        this.showTasks();
     }
 
     render() {
@@ -168,6 +148,14 @@ export default class TasksList extends Component {
 }
 
 if (document.getElementById('tasks_list')) {
+    
     let apiClient = new ApiClient();
-    ReactDOM.render(<TasksList apiClient={apiClient} />, document.getElementById('tasks_list'));
+
+    apiClient.getAllTasks()
+    .then((result) => {
+        ReactDOM.render(<TasksList tasks={result.data} apiClient={apiClient} />, document.getElementById('tasks_list'));
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 }
