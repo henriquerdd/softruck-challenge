@@ -32,4 +32,24 @@ export default class ApiClient {
     deleteTask(taskReference) {
         return this.httpClient.delete('/api' + taskReference);
     }
+
+    getAllBoards() {
+        return this.httpClient.get('/api/boards');
+    }
+
+    getBoard(boardRefence) {
+        return this.httpClient.get('/api' + boardRefence);
+    }
+
+    createBoard(board) {
+        return this.httpClient.post('/api/boards', board);
+    }
+
+    updateBoard(board) {
+        return this.httpClient.patch('/api' + board['self'], board);
+    }
+
+    deleteBoard(boardRefence) {
+        return this.httpClient.delete('/api' + boardRefence);
+    }
 }
