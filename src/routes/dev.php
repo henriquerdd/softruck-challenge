@@ -1,5 +1,3 @@
 <?php
 
-Route::get('/logs', function () {
-    return file_get_contents(storage_path('logs/laravel.log'));
-});
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
