@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import Display from '../utils/display';
-import ApiClient from '../../apiClient';
+import { Link } from 'react-router-dom'
 
 function TaskUpdateInputs(props) {
     
@@ -22,7 +21,7 @@ function TaskUpdateInputs(props) {
                 <textarea name="description" rows="3" value={props.description} onChange={(e) => props.onInputChange("description", e.currentTarget.value)} className="form-control"></textarea>
             </div>
             <div className="form-group col-sm-12">
-                <a href="/tasks" className="btn btn-default">Cancelar</a>
+                <Link className="btn btn-default" to="/tasks">Voltar</Link>
                 <button className="btn btn-primary" onClick={props.onSubmit}>Salvar</button>
             </div>
         </div>
@@ -34,13 +33,28 @@ export default class TasksChanger extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            task: props.task,
+            task: null,
             showMessage: false,
             success: false,
             message: ""
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        
+        const { match: { params } } = this.props;
+
+        this.props.apiClient.getTask("/tasks/" + params.taskUuid)
+        .then((result) => {
+            this.setState({
+                task: result.data 
+            });
+        })
+        .catch((err) => {
+            console.error(err);
+        });
     }
 
     updateTask(task) {
@@ -56,7 +70,7 @@ export default class TasksChanger extends Component {
             });
 
             setTimeout(() => {
-                window.location = '/tasks';
+                this.props.history.push('/tasks');
             }, 1500);
         })
         .catch((err) => {
@@ -116,21 +130,33 @@ export default class TasksChanger extends Component {
     render() {
         return (
             <div>
-                <Display showMessage={this.state.showMessage} success={this.state.success} message={this.state.message} />
-                <TaskUpdateInputs
-                    name={this.state.task.name}
-                    description={this.state.task.description}
-                    status={this.state.task.status}
-                    onInputChange={this.handleInputChange}
-                    onSubmit={this.handleSubmit}
-                    availableStatus={this.getAvailableStatus()}
-                />
+                {
+                    this.state.task ?
+                        <div>
+                            <section className="content-header">
+                                <h1 className="pull-left">Editando tarefa: {this.state.task.name}</h1>
+                            </section>
+                            <div className="content">
+                                <div className="clearfix"></div>
+                                <Display showMessage={this.state.showMessage} success={this.state.success} message={this.state.message} />
+                                <div className="clearfix"></div>
+                                <div className="box box-primary">
+                                    <div className="box-body">
+                                        <TaskUpdateInputs
+                                            name={this.state.task.name}
+                                            description={this.state.task.description}
+                                            status={this.state.task.status}
+                                            onInputChange={this.handleInputChange}
+                                            onSubmit={this.handleSubmit}
+                                            availableStatus={this.getAvailableStatus()}
+                                        />    
+                                    </div>
+                                </div>
+                            </div>
+                        </div> :
+                    null
+                }                
             </div>
         );
     }
-}
-
-if (document.getElementById('tasks_update')) {
-    let apiClient = new ApiClient();
-    ReactDOM.render(<TasksChanger apiClient={apiClient} task={task} />, document.getElementById('tasks_update'));
 }

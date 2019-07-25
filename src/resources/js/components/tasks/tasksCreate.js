@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import Display from '../utils/display';
-import ApiClient from '../../apiClient';
+import { Link } from 'react-router-dom'
 
 function TaskCreateInputs(props) {
     
@@ -16,7 +15,7 @@ function TaskCreateInputs(props) {
                 <textarea name="description" rows="3" value={props.description} onChange={(e) => props.onInputChange("description", e.currentTarget.value)} className="form-control"></textarea>
             </div>
             <div className="form-group col-sm-12">
-                <a href="/tasks" className="btn btn-default">Cancelar</a>
+                <Link className="btn btn-default" to="/tasks">Voltar</Link>
                 <button className="btn btn-primary" onClick={props.onSubmit}>Salvar</button>
             </div>
         </div>
@@ -95,14 +94,25 @@ export default class TasksCreator extends Component {
     render() {
         return (
             <div>
-                <Display showMessage={this.state.showMessage} success={this.state.success} message={this.state.message} />
-                <TaskCreateInputs name={this.state.name} description={this.state.description} onInputChange={this.handleInputChange} onSubmit={this.handleSubmit} />
+                <section className="content-header">
+                    <h1 className="pull-left">Nova tarefa</h1>
+                </section>
+                <div className="content">
+                    <div className="clearfix"></div>
+                    <Display showMessage={this.state.showMessage} success={this.state.success} message={this.state.message} />
+                    <div className="clearfix"></div>
+                    <div className="box box-primary">
+                        <div className="box-body">
+                            <TaskCreateInputs name={this.state.name} description={this.state.description} onInputChange={this.handleInputChange} onSubmit={this.handleSubmit} />
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
 }
 
-if (document.getElementById('tasks_create')) {
-    let apiClient = new ApiClient();
-    ReactDOM.render(<TasksCreator apiClient={apiClient} />, document.getElementById('tasks_create'));
-}
+// if (document.getElementById('tasks_create')) {
+//     let apiClient = new ApiClient();
+//     ReactDOM.render(<TasksCreator apiClient={apiClient} />, document.getElementById('tasks_create'));
+// }
