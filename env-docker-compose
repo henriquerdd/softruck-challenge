@@ -19,11 +19,12 @@ WORKSPACE_PUID=1000
 WORKSPACE_PGID=1000
 WORKSPACE_TIMEZONE=UTC
 
-### POSTGRES ##########################################################################################################
+### MYSQL ##############################################################################################################
 
-DB_USERNAME=placeholder
-DB_PASSWORD=placeholder
-WORKSPACE_TIMEZONE=UTC
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=tasks_manager
+DB_USERNAME=dev
+DB_PASSWORD=dev
 
 ### NGINX ##############################################################################################################
 
