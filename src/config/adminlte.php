@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'Tasks Manager',
+    'title' => 'Gerenciador de Tarefas',
 
     'title_prefix' => '',
 
@@ -30,9 +30,9 @@ return [
     |
     */
 
-    'logo' => '<b>Task</b>Manager',
+    'logo' => '<b>G</b>erenciador de Tarefas',
 
-    'logo_mini' => '<b>T</b>',
+    'logo_mini' => '<b>G</b>T',
 
     /*
     |--------------------------------------------------------------------------
@@ -111,12 +111,12 @@ return [
         'Menu',
         [
             'text'        => 'Tarefas',
-            'route'         => 'tasks.index',
+            'url'         => '/tasks',
             'icon'        => 'check-square-o',
         ],
         [
             'text'        => 'Quadros',
-            'route'         => 'boards.index',
+            'url'         => '/boards',
             'icon'        => 'calendar',
         ]
     ],
