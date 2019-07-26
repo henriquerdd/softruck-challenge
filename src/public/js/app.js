@@ -71627,7 +71627,7 @@ var safeInvoke = function safeInvoke(fn) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -76149,28 +76149,79 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+var API_BASE_URL = 'http://localhost';
+
+var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
 var ApiClient =
 /*#__PURE__*/
 function () {
-  function ApiClient(baseUrl, headers) {
+  function ApiClient() {
     _classCallCheck(this, ApiClient);
 
     this.httpClient = axios.create({
-      baseUrl: baseUrl,
-      timeout: 3000,
-      headers: headers
+      baseUrl: API_BASE_URL,
+      timeout: 5000,
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      }
     });
   }
 
   _createClass(ApiClient, [{
+    key: "getAllTasks",
+    value: function getAllTasks() {
+      return this.httpClient.get('/api/tasks');
+    }
+  }, {
+    key: "getTask",
+    value: function getTask(taskReference) {
+      return this.httpClient.get('/api' + taskReference);
+    }
+  }, {
     key: "createTask",
     value: function createTask(task) {
       return this.httpClient.post('/api/tasks', task);
     }
   }, {
-    key: "getAllTasks",
-    value: function getAllTasks() {
-      return this.httpClient.get('/api/tasks');
+    key: "updateTask",
+    value: function updateTask(task) {
+      return this.httpClient.patch('/api' + task['self'], task);
+    }
+  }, {
+    key: "deleteTask",
+    value: function deleteTask(taskReference) {
+      return this.httpClient["delete"]('/api' + taskReference);
+    }
+  }, {
+    key: "getAllBoards",
+    value: function getAllBoards() {
+      return this.httpClient.get('/api/boards');
+    }
+  }, {
+    key: "getBoard",
+    value: function getBoard(boardRefence) {
+      return this.httpClient.get('/api' + boardRefence);
+    }
+  }, {
+    key: "createBoard",
+    value: function createBoard(board) {
+      return this.httpClient.post('/api/boards', board);
+    }
+  }, {
+    key: "updateBoard",
+    value: function updateBoard(board) {
+      return this.httpClient.patch('/api' + board['self'], board);
+    }
+  }, {
+    key: "deleteBoard",
+    value: function deleteBoard(boardRefence) {
+      return this.httpClient["delete"]('/api' + boardRefence);
+    }
+  }, {
+    key: "getBoardTasks",
+    value: function getBoardTasks(boardRefence) {
+      return this.httpClient.get('/api' + boardRefence + '/tasks');
     }
   }]);
 
@@ -76194,9 +76245,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _apiClient__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./apiClient */ "./resources/js/apiClient.js");
-/* harmony import */ var _components_tasks_tasksList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/tasks/tasksList */ "./resources/js/components/tasks/tasksList.js");
-/* harmony import */ var _components_tasks_tasksCreate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/tasks/tasksCreate */ "./resources/js/components/tasks/tasksCreate.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _apiClient__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./apiClient */ "./resources/js/apiClient.js");
+/* harmony import */ var _components_tasks_tasksList__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/tasks/tasksList */ "./resources/js/components/tasks/tasksList.js");
+/* harmony import */ var _components_tasks_tasksCreate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/tasks/tasksCreate */ "./resources/js/components/tasks/tasksCreate.js");
+/* harmony import */ var _components_tasks_tasksUpdate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/tasks/tasksUpdate */ "./resources/js/components/tasks/tasksUpdate.js");
+/* harmony import */ var _components_boards_boardsList__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/boards/boardsList */ "./resources/js/components/boards/boardsList.js");
+/* harmony import */ var _components_boards_boardsCreate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/boards/boardsCreate */ "./resources/js/components/boards/boardsCreate.js");
+/* harmony import */ var _components_boards_boardsUpdate__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/boards/boardsUpdate */ "./resources/js/components/boards/boardsUpdate.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -76204,29 +76280,88 @@ __webpack_require__.r(__webpack_exports__);
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-__webpack_require__(/*! ./components/tasks/tasksCreate */ "./resources/js/components/tasks/tasksCreate.js");
 
 
 
 
 
 
-var API_BASE_URL = 'http://localhost';
-var apiClient = new _apiClient__WEBPACK_IMPORTED_MODULE_2__["default"](API_BASE_URL, {
-  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-});
 
-if (document.getElementById('tasks_list')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_tasks_tasksList__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    apiClient: apiClient
-  }), document.getElementById('tasks_list'));
-}
 
-if (document.getElementById('tasks_create')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_tasks_tasksCreate__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    apiClient: apiClient
-  }), document.getElementById('tasks_create'));
-}
+
+
+var apiClient = new _apiClient__WEBPACK_IMPORTED_MODULE_3__["default"]();
+
+var App =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(App, _Component);
+
+  function App() {
+    _classCallCheck(this, App);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(App).apply(this, arguments));
+  }
+
+  _createClass(App, [{
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["BrowserRouter"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+        exact: true,
+        path: "/tasks",
+        render: function render(props) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_tasks_tasksList__WEBPACK_IMPORTED_MODULE_4__["default"], _extends({}, props, {
+            apiClient: apiClient
+          }));
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+        exact: true,
+        path: "/tasks/create",
+        render: function render(props) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_tasks_tasksCreate__WEBPACK_IMPORTED_MODULE_5__["default"], _extends({}, props, {
+            apiClient: apiClient
+          }));
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+        exact: true,
+        path: "/tasks/:taskUuid",
+        render: function render(props) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_tasks_tasksUpdate__WEBPACK_IMPORTED_MODULE_6__["default"], _extends({}, props, {
+            apiClient: apiClient
+          }));
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+        exact: true,
+        path: "/boards",
+        render: function render(props) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_boards_boardsList__WEBPACK_IMPORTED_MODULE_7__["default"], _extends({}, props, {
+            apiClient: apiClient
+          }));
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+        exact: true,
+        path: "/boards/create",
+        render: function render(props) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_boards_boardsCreate__WEBPACK_IMPORTED_MODULE_8__["default"], _extends({}, props, {
+            apiClient: apiClient
+          }));
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+        exact: true,
+        path: "/boards/:boardUuid",
+        render: function render(props) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_boards_boardsUpdate__WEBPACK_IMPORTED_MODULE_9__["default"], _extends({}, props, {
+            apiClient: apiClient
+          }));
+        }
+      }))));
+    }
+  }]);
+
+  return App;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('app'));
 
 /***/ }),
 
@@ -76288,19 +76423,20 @@ if (token) {
 
 /***/ }),
 
-/***/ "./resources/js/components/tasks/tasksCreate.js":
-/*!******************************************************!*\
-  !*** ./resources/js/components/tasks/tasksCreate.js ***!
-  \******************************************************/
+/***/ "./resources/js/components/boards/boardsCreate.js":
+/*!********************************************************!*\
+  !*** ./resources/js/components/boards/boardsCreate.js ***!
+  \********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TasksCreator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BoardsCreator; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _utils_display__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/display */ "./resources/js/components/utils/display.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -76318,6 +76454,648 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+function BoardCreateInputs(props) {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "row"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-6"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "name"
+  }, " Nome: "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "text",
+    name: "name",
+    value: props.name,
+    onChange: function onChange(e) {
+      return props.onInputChange("name", e.currentTarget.value);
+    },
+    className: "form-control"
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-12"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "description"
+  }, "Descri\xE7\xE3o"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+    name: "description",
+    rows: "3",
+    value: props.description,
+    onChange: function onChange(e) {
+      return props.onInputChange("description", e.currentTarget.value);
+    },
+    className: "form-control"
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-12"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "tasks"
+  }, " Tarefas: "), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    id: "boardTasks",
+    name: "tasks[]",
+    value: props.boardTasks,
+    onChange: function onChange(e) {
+      return props.onInputChange("tasks", $('#boardTasks').val());
+    },
+    className: "form-control",
+    multiple: "multiple"
+  }, props.availableTasks.map(function (task) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+      value: task.self,
+      key: task.self
+    }, task.name);
+  }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-12"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    className: "btn btn-default",
+    to: "/boards"
+  }, "Voltar"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "btn btn-primary",
+    onClick: props.onSubmit
+  }, "Salvar")));
+}
+
+var BoardsCreator =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(BoardsCreator, _Component);
+
+  function BoardsCreator(props) {
+    var _this;
+
+    _classCallCheck(this, BoardsCreator);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(BoardsCreator).call(this, props));
+    _this.state = {
+      name: "",
+      description: "",
+      tasks: [],
+      showMessage: false,
+      success: false,
+      message: "",
+      availableTasks: []
+    };
+    _this.handleInputChange = _this.handleInputChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(BoardsCreator, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.props.apiClient.getAllTasks().then(function (result) {
+        _this2.setState({
+          availableTasks: result.data
+        });
+      })["catch"](function (err) {
+        console.error(err);
+      });
+    }
+  }, {
+    key: "creatBoard",
+    value: function creatBoard(name, description, tasks) {
+      var _this3 = this;
+
+      this.props.apiClient.createBoard({
+        'name': name,
+        'description': description,
+        'tasks': tasks
+      }).then(function (result) {
+        _this3.setState({
+          name: "",
+          description: "",
+          showMessage: true,
+          success: true,
+          message: "Quadro criado com sucesso!"
+        });
+
+        setTimeout(function () {
+          _this3.setState({
+            showMessage: false
+          });
+        }, 3000);
+      })["catch"](function (err) {
+        _this3.setState({
+          showMessage: true,
+          success: false,
+          message: "Ocorreu um erro ao tentar criar seu quadro. Tente novamente mais tarde"
+        });
+
+        setTimeout(function () {
+          _this3.setState({
+            showMessage: false
+          });
+        }, 3000);
+        console.log(err);
+      });
+    }
+  }, {
+    key: "handleInputChange",
+    value: function handleInputChange(name, value) {
+      var newState = {};
+      newState[name] = value;
+      this.setState(newState);
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit() {
+      if (!this.state.name) {
+        this.setState({
+          showMessage: true,
+          success: false,
+          message: "O campo nome é obrigatório"
+        });
+      } else {
+        this.creatBoard(this.state.name, this.state.description, this.state.tasks);
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
+        className: "content-header"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "pull-left"
+      }, "Novo quadro")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "content"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "clearfix"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_display__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        showMessage: this.state.showMessage,
+        success: this.state.success,
+        message: this.state.message
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "clearfix"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box box-primary"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box-body"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BoardCreateInputs, {
+        name: this.state.name,
+        description: this.state.description,
+        boardTasks: this.state.tasks,
+        availableTasks: this.state.availableTasks,
+        onInputChange: this.handleInputChange,
+        onSubmit: this.handleSubmit
+      })))));
+    }
+  }]);
+
+  return BoardsCreator;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/boards/boardsList.js":
+/*!******************************************************!*\
+  !*** ./resources/js/components/boards/boardsList.js ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BoardsList; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tasks_tasksList__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../tasks/tasksList */ "./resources/js/components/tasks/tasksList.js");
+/* harmony import */ var mdbreact__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! mdbreact */ "./node_modules/mdbreact/dist/mdbreact.esm.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+var BoardsList =
+/*#__PURE__*/
+function (_TasksList) {
+  _inherits(BoardsList, _TasksList);
+
+  function BoardsList(props) {
+    var _this;
+
+    _classCallCheck(this, BoardsList);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(BoardsList).call(this, props));
+    _this.state = {
+      availableBoards: [],
+      boardTasks: [],
+      board: null
+    };
+    return _this;
+  }
+
+  _createClass(BoardsList, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.props.apiClient.getAllBoards().then(function (result) {
+        var boards = result.data;
+        boards.unshift({
+          self: '',
+          name: ''
+        });
+
+        _this2.setState({
+          availableBoards: boards
+        });
+      })["catch"](function (err) {
+        console.error(err);
+      });
+    }
+  }, {
+    key: "handleBoardSelectionChange",
+    value: function handleBoardSelectionChange(selectedBoard) {
+      var _this3 = this;
+
+      this.props.apiClient.getBoardTasks(selectedBoard).then(function (result) {
+        _this3.setState({
+          board: _this3.state.availableBoards.filter(function (board) {
+            return board.self == selectedBoard;
+          })[0],
+          tasks: result.data,
+          rows: _this3.makeRows(result.data)
+        });
+      })["catch"](function (err) {
+        console.error(err);
+      });
+    }
+  }, {
+    key: "deleteBoard",
+    value: function deleteBoard(boardReference) {
+      var _this4 = this;
+
+      this.props.apiClient.deleteBoard(boardReference).then(function (result) {
+        _this4.setState({
+          availableBoards: _this4.state.availableBoards.filter(function (board) {
+            return board['self'] != boardReference;
+          }),
+          board: null,
+          tasks: [],
+          rows: []
+        });
+      })["catch"](function (err) {
+        console.error(err);
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this5 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
+        className: "content-header"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "pull-left"
+      }, "Quadros"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "pull-right"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+        className: "btn btn-primary pull-right",
+        style: {
+          marginTop: -10,
+          marginBottom: 5
+        },
+        to: "/boards/create"
+      }, "Novo"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "content"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "clearfix"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box box-primary"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box-body"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group col-sm-6"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "board"
+      }, " Quadros dispon\xEDveis: "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        name: "board",
+        onChange: function onChange(e) {
+          return _this5.handleBoardSelectionChange(e.currentTarget.value);
+        },
+        value: this.state.board ? this.state.board.self : '',
+        className: "form-control"
+      }, this.state.availableBoards.map(function (board) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: board.self,
+          key: board.self
+        }, board.name);
+      })))), this.state.board ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-sm-12"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        title: this.state.board.description
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+        className: "pull-left",
+        to: this.state.board.self
+      }, this.state.board.name))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-sm-12"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(mdbreact__WEBPACK_IMPORTED_MODULE_2__["MDBDataTable"], {
+        striped: true,
+        bordered: true,
+        hover: true,
+        responsive: true,
+        data: {
+          columns: this.state.columns,
+          rows: this.state.rows
+        }
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-sm-12"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "btn btn-danger pull-right",
+        onClick: function onClick(e) {
+          return _this5.deleteBoard(_this5.state.board['self']);
+        }
+      }, "Excluir Quadro"))) : null))));
+    }
+  }]);
+
+  return BoardsList;
+}(_tasks_tasksList__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/boards/boardsUpdate.js":
+/*!********************************************************!*\
+  !*** ./resources/js/components/boards/boardsUpdate.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BoardsChanger; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_display__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/display */ "./resources/js/components/utils/display.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+function BoardUpdateInputs(props) {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "row"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-6"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "name"
+  }, " Nome: "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "text",
+    name: "name",
+    value: props.name,
+    onChange: function onChange(e) {
+      return props.onInputChange("name", e.currentTarget.value);
+    },
+    className: "form-control"
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-12"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "description"
+  }, "Descri\xE7\xE3o"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+    name: "description",
+    rows: "3",
+    value: props.description,
+    onChange: function onChange(e) {
+      return props.onInputChange("description", e.currentTarget.value);
+    },
+    className: "form-control"
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-12"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "tasks[]"
+  }, " Tarefas: "), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    id: "boardTasks",
+    name: "tasks[]",
+    value: props.tasks,
+    onChange: function onChange(e) {
+      return props.onInputChange("tasks", $('#boardTasks').val());
+    },
+    className: "form-control",
+    multiple: "multiple"
+  }, props.availableTasks.map(function (task) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+      value: task.self,
+      key: task.self
+    }, task.name);
+  }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-12"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    className: "btn btn-default",
+    to: "/boards"
+  }, "Voltar"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "btn btn-primary",
+    onClick: props.onSubmit
+  }, "Salvar")));
+}
+
+var BoardsChanger =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(BoardsChanger, _Component);
+
+  function BoardsChanger(props) {
+    var _this;
+
+    _classCallCheck(this, BoardsChanger);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(BoardsChanger).call(this, props));
+    _this.state = {
+      board: null,
+      availableTasks: [],
+      showMessage: false,
+      success: false,
+      message: ""
+    };
+    _this.handleInputChange = _this.handleInputChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(BoardsChanger, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      var params = this.props.match.params;
+      Promise.all([this.props.apiClient.getBoard('/boards/' + params.boardUuid), this.props.apiClient.getBoardTasks('/boards/' + params.boardUuid), this.props.apiClient.getAllTasks()]).then(function (results) {
+        var board = results[0].data;
+        board['tasks'] = results[1].data.map(function (task) {
+          return task.self;
+        });
+
+        _this2.setState({
+          board: board,
+          availableTasks: results[2].data
+        });
+      })["catch"](function (err) {
+        console.error(err);
+      });
+    }
+  }, {
+    key: "updateBoard",
+    value: function updateBoard(board) {
+      var _this3 = this;
+
+      this.props.apiClient.updateBoard(board).then(function (result) {
+        _this3.setState({
+          showMessage: true,
+          success: true,
+          message: "Quadro atualizado com com sucesso!"
+        });
+
+        setTimeout(function () {
+          _this3.props.history.push('/boards');
+        }, 1500);
+      })["catch"](function (err) {
+        _this3.setState({
+          showMessage: true,
+          success: false,
+          message: "Ocorreu um erro ao tentar atualizar seu quadro. Tente novamente mais tarde"
+        });
+
+        console.error(err);
+      });
+    }
+  }, {
+    key: "handleInputChange",
+    value: function handleInputChange(name, value) {
+      var board = this.state.board;
+      board[name] = value;
+      this.setState({
+        board: board
+      });
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit() {
+      if (!this.state.board.name) {
+        this.setState({
+          showMessage: true,
+          success: false,
+          message: "O campo nome é obrigatório"
+        });
+      } else {
+        this.updateBoard(this.state.board);
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.board ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
+        className: "content-header"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "pull-left"
+      }, "Editando quadro: ", this.state.board.name)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "content"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "clearfix"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_display__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        showMessage: this.state.showMessage,
+        success: this.state.success,
+        message: this.state.message
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "clearfix"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box box-primary"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box-body"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BoardUpdateInputs, {
+        name: this.state.board.name,
+        description: this.state.board.description,
+        tasks: this.state.board.tasks,
+        onInputChange: this.handleInputChange,
+        onSubmit: this.handleSubmit,
+        availableTasks: this.state.availableTasks
+      }))))) : null);
+    }
+  }]);
+
+  return BoardsChanger;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/tasks/tasksCreate.js":
+/*!******************************************************!*\
+  !*** ./resources/js/components/tasks/tasksCreate.js ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TasksCreator; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_display__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/display */ "./resources/js/components/utils/display.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -76351,10 +77129,10 @@ function TaskCreateInputs(props) {
     className: "form-control"
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group col-sm-12"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: "/tasks",
-    className: "btn btn-default"
-  }, "Cancelar"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    className: "btn btn-default",
+    to: "/tasks"
+  }, "Voltar"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-primary",
     onClick: props.onSubmit
   }, "Salvar")));
@@ -76438,21 +77216,39 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_display__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
+        className: "content-header"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "pull-left"
+      }, "Nova tarefa")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "content"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "clearfix"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_display__WEBPACK_IMPORTED_MODULE_1__["default"], {
         showMessage: this.state.showMessage,
         success: this.state.success,
         message: this.state.message
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(TaskCreateInputs, {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "clearfix"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box box-primary"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box-body"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(TaskCreateInputs, {
         name: this.state.name,
         description: this.state.description,
         onInputChange: this.handleInputChange,
         onSubmit: this.handleSubmit
-      }));
+      })))));
     }
   }]);
 
   return TasksCreator;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]); // if (document.getElementById('tasks_create')) {
+//     let apiClient = new ApiClient();
+//     ReactDOM.render(<TasksCreator apiClient={apiClient} />, document.getElementById('tasks_create'));
+// }
+
 
 
 
@@ -76471,6 +77267,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var mdbreact__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mdbreact */ "./node_modules/mdbreact/dist/mdbreact.esm.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -76481,9 +77278,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -76491,7 +77288,12 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var datatableColumns = [{
+  label: 'Ações',
+  field: 'actions',
+  width: 100
+}, {
   label: 'Nome',
   field: 'name',
   sort: 'asc',
@@ -76518,51 +77320,6 @@ var datatableColumns = [{
   width: 300
 }];
 
-function formatStatusColumn(status) {
-  var color, icon, text;
-
-  switch (status) {
-    case 'PENDING':
-      color = 'text-red';
-      icon = 'fa fa-edit';
-      text = " Pendente"; //return "<span class='text-red'><i class='fa fa-edit'></i> Pendente</span>";
-
-      break;
-
-    case 'ACCEPTED':
-      color = 'text-blue';
-      icon = 'fa fa-edit';
-      text = " Aceita"; //return "<span class='text-orange'><i class='fa fa-edit'></i> Aceita</span>";
-
-      break;
-
-    case 'FINISHED':
-      color = 'text-green';
-      icon = 'fa fa-edit';
-      text = " Terminada"; //return "<span class='text-green'><i class='fa fa-edit'></i> Terminada</span>";
-
-      break;
-  }
-
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: color
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: icon
-  }), text);
-}
-
-function formatDate(dateString) {
-  var options = {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric'
-  };
-  return new Intl.DateTimeFormat('pt-BR', options).format(Date.parse(dateString));
-}
-
 var TasksList =
 /*#__PURE__*/
 function (_Component) {
@@ -76575,9 +77332,11 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(TasksList).call(this, props));
     _this.state = {
+      tasks: [],
       columns: datatableColumns,
       rows: []
     };
+    _this.deleteTask = _this.deleteTask.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -76587,27 +77346,138 @@ function (_Component) {
       var _this2 = this;
 
       this.props.apiClient.getAllTasks().then(function (result) {
-        var data = result.data.map(function (row) {
-          return {
-            name: row['name'],
-            status: formatStatusColumn(row['status']),
-            createdAt: formatDate(row['createdAt']),
-            updatedAt: formatDate(row['updatedAt']),
-            description: row['description']
-          };
-        });
-
         _this2.setState({
-          rows: data
+          tasks: result.data,
+          rows: _this2.makeRows(result.data)
         });
       })["catch"](function (err) {
         console.error(err);
       });
     }
   }, {
+    key: "formatStatusColumn",
+    value: function formatStatusColumn(status) {
+      var color, icon, text;
+
+      switch (status) {
+        case 'PENDING':
+          color = 'text-red';
+          icon = 'fa fa-square-o';
+          text = " Pendente";
+          break;
+
+        case 'ACCEPTED':
+          color = 'text-blue';
+          icon = 'fa fa-dot-circle-o';
+          text = " Aceita";
+          break;
+
+        case 'FINISHED':
+          color = 'text-green';
+          icon = 'fa fa-check-square-o';
+          text = " Terminada";
+          break;
+      }
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: color
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: icon
+      }), text);
+    }
+  }, {
+    key: "formatDate",
+    value: function formatDate(dateString) {
+      var options = {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      };
+      return new Intl.DateTimeFormat('pt-BR', options).format(Date.parse(dateString));
+    }
+  }, {
+    key: "deleteTask",
+    value: function deleteTask(taskReference) {
+      var _this3 = this;
+
+      this.props.apiClient.deleteTask(taskReference).then(function (result) {
+        var tasks = _this3.state.tasks.filter(function (task) {
+          return task['self'] != taskReference;
+        });
+
+        _this3.setState({
+          tasks: tasks,
+          rows: _this3.makeRows(tasks)
+        });
+      })["catch"](function (err) {
+        console.error(err);
+      });
+    }
+  }, {
+    key: "getAvailableActions",
+    value: function getAvailableActions(task) {
+      var _this4 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "btn-group"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+        className: "btn btn-default",
+        to: task['self']
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-edit"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "btn btn-danger",
+        onClick: function onClick(e) {
+          return _this4.deleteTask(task['self']);
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-trash"
+      })));
+    }
+  }, {
+    key: "makeRows",
+    value: function makeRows(tasks) {
+      var _this5 = this;
+
+      return tasks.map(function (task) {
+        return {
+          actions: _this5.getAvailableActions(task),
+          name: task['name'],
+          status: _this5.formatStatusColumn(task['status']),
+          createdAt: _this5.formatDate(task['createdAt']),
+          updatedAt: _this5.formatDate(task['updatedAt']),
+          description: task['description']
+        };
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(mdbreact__WEBPACK_IMPORTED_MODULE_1__["MDBDataTable"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
+        className: "content-header"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "pull-left"
+      }, "Tarefas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "pull-right"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+        className: "btn btn-primary pull-right",
+        style: {
+          marginTop: -10,
+          marginBottom: 5
+        },
+        to: "/tasks/create"
+      }, "Nova"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "content"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "clearfix"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box box-primary"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box-body"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(mdbreact__WEBPACK_IMPORTED_MODULE_1__["MDBDataTable"], {
         striped: true,
         bordered: true,
         hover: true,
@@ -76616,11 +77486,247 @@ function (_Component) {
           columns: this.state.columns,
           rows: this.state.rows
         }
-      });
+      })))));
     }
   }]);
 
   return TasksList;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]); // if (document.getElementById('tasks_list')) {
+//     let apiClient = new ApiClient();
+//     apiClient.getAllTasks()
+//     .then((result) => {
+//         ReactDOM.render(<TasksList tasks={result.data} apiClient={apiClient} />, document.getElementById('tasks_list'));
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
+// }
+
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/tasks/tasksUpdate.js":
+/*!******************************************************!*\
+  !*** ./resources/js/components/tasks/tasksUpdate.js ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TasksChanger; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_display__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/display */ "./resources/js/components/utils/display.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+function TaskUpdateInputs(props) {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "row"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-6"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "name"
+  }, " Nome: "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "text",
+    name: "name",
+    value: props.name,
+    onChange: function onChange(e) {
+      return props.onInputChange("name", e.currentTarget.value);
+    },
+    className: "form-control"
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-6"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "status"
+  }, " Estado: "), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    name: "status",
+    defaultValue: props.status,
+    onChange: function onChange(e) {
+      return props.onInputChange("status", e.currentTarget.value);
+    }
+  }, props.availableStatus.map(function (status) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+      value: status.value,
+      key: status.value
+    }, status.display);
+  }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-12"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "description"
+  }, "Descri\xE7\xE3o"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+    name: "description",
+    rows: "3",
+    value: props.description,
+    onChange: function onChange(e) {
+      return props.onInputChange("description", e.currentTarget.value);
+    },
+    className: "form-control"
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group col-sm-12"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    className: "btn btn-default",
+    to: "/tasks"
+  }, "Voltar"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "btn btn-primary",
+    onClick: props.onSubmit
+  }, "Salvar")));
+}
+
+var TasksChanger =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(TasksChanger, _Component);
+
+  function TasksChanger(props) {
+    var _this;
+
+    _classCallCheck(this, TasksChanger);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(TasksChanger).call(this, props));
+    _this.state = {
+      task: null,
+      showMessage: false,
+      success: false,
+      message: ""
+    };
+    _this.handleInputChange = _this.handleInputChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(TasksChanger, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      var params = this.props.match.params;
+      this.props.apiClient.getTask("/tasks/" + params.taskUuid).then(function (result) {
+        _this2.setState({
+          task: result.data
+        });
+      })["catch"](function (err) {
+        console.error(err);
+      });
+    }
+  }, {
+    key: "updateTask",
+    value: function updateTask(task) {
+      var _this3 = this;
+
+      this.props.apiClient.updateTask(task).then(function (result) {
+        _this3.setState({
+          task: result.data,
+          showMessage: true,
+          success: true,
+          message: "Tarefa atualizada com sucesso!"
+        });
+
+        setTimeout(function () {
+          _this3.props.history.push('/tasks');
+        }, 1500);
+      })["catch"](function (err) {
+        _this3.setState({
+          showMessage: true,
+          success: false,
+          message: "Ocorreu um erro ao tentar atualizar sua tarefa. Tente novamente mais tarde"
+        });
+
+        console.log(err);
+      });
+    }
+  }, {
+    key: "handleInputChange",
+    value: function handleInputChange(name, value) {
+      var task = this.state.task;
+      task[name] = value;
+      this.setState({
+        task: task
+      });
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit() {
+      if (!this.state.task.name) {
+        this.setState({
+          showMessage: true,
+          success: false,
+          message: "O campo nome é obrigatório"
+        });
+      } else {
+        this.updateTask(this.state.task);
+      }
+    }
+  }, {
+    key: "getAvailableStatus",
+    value: function getAvailableStatus() {
+      return [{
+        value: 'PENDING',
+        display: 'Pendente'
+      }, {
+        value: 'ACCEPTED',
+        display: 'Aceita'
+      }, {
+        value: 'FINISHED',
+        display: 'Terminada'
+      }];
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.task ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
+        className: "content-header"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "pull-left"
+      }, "Editando tarefa: ", this.state.task.name)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "content"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "clearfix"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_display__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        showMessage: this.state.showMessage,
+        success: this.state.success,
+        message: this.state.message
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "clearfix"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box box-primary"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "box-body"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(TaskUpdateInputs, {
+        name: this.state.task.name,
+        description: this.state.task.description,
+        status: this.state.task.status,
+        onInputChange: this.handleInputChange,
+        onSubmit: this.handleSubmit,
+        availableStatus: this.getAvailableStatus()
+      }))))) : null);
+    }
+  }]);
+
+  return TasksChanger;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 
