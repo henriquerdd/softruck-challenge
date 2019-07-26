@@ -12,6 +12,7 @@ Uma tarefa possui os sguintes atributos:
 - state: Estado, pode ter um dos seguinte valores: PENDING, ACCEPTED e FINISHED.
 - createdAt: Timestamp de criação da tarefa.
 - updatedAt: Timestamp de atualização da tarefa.
+- uuid: Identificar único, não númerico, utilizado para não vazar informações sobre a base.
 
 ##Boards
 
@@ -21,6 +22,7 @@ Um quador possui os sguintes atributos:
 - description: Descrição (opcional)
 - createdAt: Timestamp de criação da tarefa.
 - updatedAt: Timestamp de atualização da tarefa.
+- uuid: Identificar único, não númerico, utilizado para não vazar informações sobre a base.
 
 Temos uma tabela intermediária chamada board_tasks que relaciona um quadro a zero ou mais tarefas, os modelos definem esse relacionamento através dos métodos: boards() em Tasks e tasks() em 
 Boards, dessa forma é fácil determinar quais tarefas pertence a que quadro e quais quadros possuem determinada tarefa.
