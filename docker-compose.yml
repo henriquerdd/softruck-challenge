@@ -40,6 +40,7 @@ services:
         args:
           - APP_MNT_PATH=${APP_MNT_PATH}
       image: softruck_challenge_php_fpm
+      entrypoint: "php artisan config:cache && php artisan migrate && php-fpm"
       volumes_from:
         - app
       volumes:
