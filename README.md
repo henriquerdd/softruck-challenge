@@ -23,3 +23,10 @@ um README detalhando mais sobre como cada um deles funciona (frontend incluso).
 
 Normalmente pacotes de terceiros não são adicionados ao repositório, nem arquivos de configuração, mas para simplificar
 a execução do app dessa vez deixarei tudo pronto de forma que somente será necessário instalar o [docker](https://docs.docker.com/install/), o [docker-compose](https://docs.docker.com/compose/install/), e executar o arquivo start.sh que está nesse diretório. A aplicação poderá então ser acessada no localhost na porta 80.
+
+Se por acaso o comando de inicialização falhar possivelmente é porque a base ainda estava sendo criada quando tentamos criar as tabelas, espere alguns instantes e execute o comando novamente ou 
+para ser mais rápido execute apenas:
+
+```
+docker-compose run -u $UID --entrypoint "php artisan migrate" svc-php-fpm
+```
