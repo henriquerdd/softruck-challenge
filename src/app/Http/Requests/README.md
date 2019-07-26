@@ -4,7 +4,7 @@
 Nesse diretório são armazenadas estruturas chamdas de FormRequests, eles servem para auxiliar na autorização e validação de requisições
 para que não seja necessário encher nossos controles com essa lógica.
 
-Todos eles possuem todos métodos chave: *authorize* e *rules*. Se authorize retorna false a requisição é interrompida e um 403 é retornado.
+Todos eles possuem os métodos chave: *authorize* e *rules*. Se authorize retorna false a requisição é interrompida e um 403 é retornado.
 Rules deve retornar um array contendo as regras as quais os paramêtros devem satisfazer para que a requisição chegue ao controle, caso alguma regra falhe 
 o estado 422 é retornado automaticamente informando quais as regras que falharam.
 

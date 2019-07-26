@@ -1,9 +1,8 @@
 
-Para realizar a tarefa decidi utilizar o laravel pois é o framework que mais conheço.
+Para realizar a tarefa decidi utilizar o laravel pois é o framework que mais conheço, logo o backend foi implementado em php.
 
-Portanto o backend foi implementado em php, o frontend foi feito utilizando react, decidi utiliza-lo
-para mostrar que tenho alguma noção de como o mundo node funciona, apesar de que comecei a trabalhar com
-isso apenas recentemente então muito provavelmente algumas coisas poderiam ter sido feitas de forma mais eficiente.
+Já o frontend foi feito utilizando react. Decidi utiliza-lo para mostrar que tenho alguma noção de como o mundo node funciona, apesar
+de não ser minha especialidade.
 
 Utilizei o nginx para servir a aplicação, o php-fpm para interpretar o código php e o mysql como base de dados.
 
@@ -25,7 +24,7 @@ Normalmente pacotes de terceiros não são adicionados ao repositório, nem arqu
 a execução do app dessa vez deixarei tudo pronto de forma que somente será necessário instalar o [docker](https://docs.docker.com/install/), o [docker-compose](https://docs.docker.com/compose/install/), e executar o arquivo start.sh que está nesse diretório. A aplicação poderá então ser acessada no localhost na porta 80.
 
 Se por acaso o comando de inicialização falhar possivelmente é porque a base ainda estava sendo criada quando tentamos criar as tabelas, espere alguns instantes e execute o comando novamente ou 
-para ser mais rápido execute apenas:
+apenas o comando para criar as tabelas.
 
 ```
 docker-compose run -u $UID --entrypoint "php artisan migrate" svc-php-fpm

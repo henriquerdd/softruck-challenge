@@ -8,8 +8,8 @@ Ambos definem os seguintes métodos:
 
 - all: retorna todos os recursos existentes
 - store: cria uma novo recurso
-- find: retorna um único recurso (se ele puder ser encontrado)
-- update: atualiza um único recurso (se ele puder ser encontrado)
-- destroy: exclui um recurso (se ele puder ser encontrado)
+- find: retorna um único recurso
+- update: atualiza um único recurso
+- destroy: exclui um recurso
 
 O controle de quadros ainda define mais um método *tasks*  que retorna todas as tarefas pertences a um quadro.
