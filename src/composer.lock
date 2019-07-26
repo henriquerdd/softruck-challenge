@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5487cda52f97a8f11b7dd9571a3cf158",
+    "content-hash": "9a2d96a1c6005062bfbdb9cc4173dbb7",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -518,60 +518,6 @@
                 "laravel"
             ],
             "time": "2019-03-10T09:17:09+00:00"
-        },
-        {
-            "name": "laracasts/flash",
-            "version": "3.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laracasts/flash.git",
-                "reference": "10cd420ab63fd0796bf5e1e5b99f87636d2f4333"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laracasts/flash/zipball/10cd420ab63fd0796bf5e1e5b99f87636d2f4333",
-                "reference": "10cd420ab63fd0796bf5e1e5b99f87636d2f4333",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "~5.0",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "dev-master",
-                "phpunit/phpunit": "^6.1"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Laracasts\\Flash\\FlashServiceProvider"
-                    ],
-                    "aliases": {
-                        "Flash": "Laracasts\\Flash\\Flash"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Laracasts\\Flash": "src/"
-                },
-                "files": [
-                    "src/Laracasts/Flash/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeffrey Way",
-                    "email": "jeffrey@laracasts.com"
-                }
-            ],
-            "description": "Easy flash notifications",
-            "time": "2017-06-22T19:01:19+00:00"
         },
         {
             "name": "laravel/framework",
@@ -4080,16 +4026,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "3.0.2",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "c4a66b97f040e3e20b3aa2a243230a1c3a9f7c8c"
+                "reference": "e899757bb3df5ff6e95089132f32cd59aac2220a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/c4a66b97f040e3e20b3aa2a243230a1c3a9f7c8c",
-                "reference": "c4a66b97f040e3e20b3aa2a243230a1c3a9f7c8c",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/e899757bb3df5ff6e95089132f32cd59aac2220a",
+                "reference": "e899757bb3df5ff6e95089132f32cd59aac2220a",
                 "shasum": ""
             },
             "require": {
@@ -4102,7 +4048,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "3.1-dev"
                 }
             },
             "autoload": {
@@ -4125,7 +4071,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2019-07-08T05:24:54+00:00"
+            "time": "2019-07-25T05:29:42+00:00"
         },
         {
             "name": "phpunit/phpunit",
