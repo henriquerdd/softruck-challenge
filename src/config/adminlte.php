@@ -30,9 +30,9 @@ return [
     |
     */
 
-    'logo' => '<b>G</b>erenciador de Tarefas',
+    'logo' => '<b>G</b>erenciador',
 
-    'logo_mini' => '<b>G</b>T',
+    'logo_mini' => '<b>G</b>',
 
     /*
     |--------------------------------------------------------------------------
