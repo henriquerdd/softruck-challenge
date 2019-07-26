@@ -22,4 +22,4 @@ Aqui fiz apenas um resumo sobre onde ficam as partes mais importantes dessa apli
 um README detalhando mais sobre como cada um deles funciona (frontend incluso).
 
 Normalmente pacotes de terceiros não são adicionados ao repositório, nem arquivos de configuração, mas para simplificar
-a execução do app dessa vez deixarei tudo pronto de forma que somente será necessário instalar o [docker](https://docs.docker.com/install/), o [docker-compose](https://docs.docker.com/compose/install/), e executar o arquivo start.sh que está nesse diretório.
+a execução do app dessa vez deixarei tudo pronto de forma que somente será necessário instalar o [docker](https://docs.docker.com/install/), o [docker-compose](https://docs.docker.com/compose/install/), e executar o arquivo start.sh que está nesse diretório. A aplicação poderá então ser acessada no localhost na porta 80.
