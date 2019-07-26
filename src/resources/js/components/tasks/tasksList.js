@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { MDBDataTable } from 'mdbreact';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 const datatableColumns = [
     {

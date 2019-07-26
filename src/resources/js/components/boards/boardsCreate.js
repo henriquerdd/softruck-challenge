@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Display from '../utils/display';
 import { Link } from 'react-router-dom';
 
-function TaskCreateInputs(props) {
+function BoardCreateInputs(props) {
     
     return (
         <div className="row">
@@ -15,59 +15,89 @@ function TaskCreateInputs(props) {
                 <textarea name="description" rows="3" value={props.description} onChange={(e) => props.onInputChange("description", e.currentTarget.value)} className="form-control"></textarea>
             </div>
             <div className="form-group col-sm-12">
-                <Link className="btn btn-default" to="/tasks">Voltar</Link>
+                <label htmlFor="tasks"> Tarefas: </label> <br />
+                <select id="boardTasks" name="tasks[]" value={props.boardTasks} onChange={(e) => props.onInputChange("tasks", $('#boardTasks').val())} className="form-control" multiple="multiple">
+                    {props.availableTasks.map((task) => <option value={task.self} key={task.self}>{task.name}</option>)}
+                </select>
+            </div>
+            <div className="form-group col-sm-12">
+                <Link className="btn btn-default" to="/boards">Voltar</Link>
                 <button className="btn btn-primary" onClick={props.onSubmit}>Salvar</button>
             </div>
         </div>
     );
 }
 
-export default class TasksCreator extends Component {
+export default class BoardsCreator extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             name: "",
             description: "",
+            tasks: [],
             showMessage: false,
             success: false,
-            message: ""
+            message: "",
+            availableTasks: []
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    creatTask(name, description) {
+    componentDidMount() {
 
-        this.props.apiClient.createTask({
-            'name': name,
-            'description': description
-        })
+        this.props.apiClient.getAllTasks()
         .then((result) => {
-            
-            this.setState({
-                name: "",
-                description: "",
-                showMessage: true,
-                success: true,
-                message: "Tarefa criada com sucesso!"
-            });
 
-            setTimeout(() => {
-                this.setState({
-                    showMessage: false
-                });
-            }, 3000);
+            this.setState({
+                availableTasks: result.data
+            });
         })
         .catch((err) => {
-            
-            this.setState({
-                showMessage: true,
-                success: false,
-                message: "Ocorreu um erro ao tentar criar sua tarefa. Tente novamente mais tarde"
-            });
-            console.log(err);
+            console.error(err);
         });
+    }
+
+    creatBoard(name, description, tasks) {
+
+        this.props.apiClient.createBoard({
+            'name': name,
+            'description': description,
+            'tasks': tasks
+        })
+            .then((result) => {
+                
+                this.setState({
+                    name: "",
+                    description: "",
+                    showMessage: true,
+                    success: true,
+                    message: "Quadro criado com sucesso!"
+                });
+
+                setTimeout(() => {
+                    this.setState({
+                        showMessage: false
+                    });
+                }, 3000);
+            })
+            .catch((err) => {
+                
+                this.setState({
+                    showMessage: true,
+                    success: false,
+                    message: "Ocorreu um erro ao tentar criar seu quadro. Tente novamente mais tarde"
+                });
+
+                setTimeout(() => {
+                    this.setState({
+                        showMessage: false
+                    });
+                }, 3000);
+                
+                console.log(err);
+            });
     }
 
     handleInputChange(name, value) {
@@ -87,7 +117,7 @@ export default class TasksCreator extends Component {
                 message: "O campo nome é obrigatório"
             });
         } else {
-            this.creatTask(this.state.name, this.state.description);
+            this.creatBoard(this.state.name, this.state.description, this.state.tasks);
         }
     }
 
@@ -95,7 +125,7 @@ export default class TasksCreator extends Component {
         return (
             <div>
                 <section className="content-header">
-                    <h1 className="pull-left">Nova tarefa</h1>
+                    <h1 className="pull-left">Novo quadro</h1>
                 </section>
                 <div className="content">
                     <div className="clearfix"></div>
@@ -103,7 +133,7 @@ export default class TasksCreator extends Component {
                     <div className="clearfix"></div>
                     <div className="box box-primary">
                         <div className="box-body">
-                            <TaskCreateInputs name={this.state.name} description={this.state.description} onInputChange={this.handleInputChange} onSubmit={this.handleSubmit} />
+                            <BoardCreateInputs name={this.state.name} description={this.state.description} boardTasks={this.state.tasks} availableTasks={this.state.availableTasks} onInputChange={this.handleInputChange} onSubmit={this.handleSubmit} />
                         </div>
                     </div>
                 </div>
@@ -111,8 +141,3 @@ export default class TasksCreator extends Component {
         );
     }
 }
-
-// if (document.getElementById('tasks_create')) {
-//     let apiClient = new ApiClient();
-//     ReactDOM.render(<TasksCreator apiClient={apiClient} />, document.getElementById('tasks_create'));
-// }
