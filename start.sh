@@ -1,0 +1,1 @@
+docker-compose up -d svc-nginx svc-php-fpm svc-mysql
