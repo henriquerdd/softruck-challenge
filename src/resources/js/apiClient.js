@@ -8,7 +8,7 @@ export default class ApiClient {
     constructor() {
         this.httpClient = axios.create({
             baseUrl: API_BASE_URL,
-            timeout: 3000,
+            timeout: 5000,
             headers: {'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')}
         });
     }
