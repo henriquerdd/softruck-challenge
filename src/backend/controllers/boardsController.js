@@ -17,7 +17,7 @@ exports.store = (req, res) => {
 
     boardsRepo.store(req.body)
         .then((result) => {
-            res.send(result);
+            res.status(201).send(result);
         })
         .catch((err) => {
             console.error(err);
@@ -56,5 +56,22 @@ exports.update = (req, res) => {
     .catch((err) => {
         console.error(err);
         res.status(500).send({message: "Ocorreu um erro ao atualizar seu quadro"});
+    });
+};
+
+exports.destroy = (req, res) => {
+
+    boardsRepo.destroy(req.params.boardUuid)
+    .then((result) => {
+
+        if (result == null) {
+            res.status(404).send("Board not found");
+        } else {
+            res.status(204).send('');
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send({message: "Ocorreu um erro ao excluir seu quadro"});
     });
 };

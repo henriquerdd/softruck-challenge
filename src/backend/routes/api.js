@@ -9,5 +9,6 @@ module.exports = (app) => {
 
     app.route('/api/boards/:boardUuid')
         .get(boardsController.find)
-        .patch(boardsController.update);
+        .patch(boardsController.update)
+        .delete(boardsController.destroy);
 };

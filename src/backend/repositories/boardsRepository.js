@@ -97,3 +97,21 @@ exports.update = (data, boardUuid) => {
         });
     });
 };
+
+exports.destroy = (boardUuid) => {
+
+    return new Promise((resolve, reject) => {
+
+        Boards.destroy({
+            where: {
+                uuid: boardUuid
+            }
+        })
+        .then((result) => {
+            resolve(result);
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
+};
