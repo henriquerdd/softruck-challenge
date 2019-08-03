@@ -1,0 +1,32 @@
+{
+  "name": "tasks-manager",
+  "version": "1.0.0",
+  "description": "Um aplicativo que permite gerênciar quadros de tarefas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henriquerdd/softruck-challenge.git"
+  },
+  "keywords": [
+    "softruck",
+    "tasks",
+    "boards"
+  ],
+  "author": "Henrique Rocha de Deus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/henriquerdd/softruck-challenge/issues"
+  },
+  "homepage": "https://github.com/henriquerdd/softruck-challenge#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql2": "^1.6.5",
+    "sequelize": "^5.12.2"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^5.5.0"
+  }
+}
