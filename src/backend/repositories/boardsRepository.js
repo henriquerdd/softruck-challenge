@@ -2,6 +2,7 @@
 var { Boards } = require('../models');
 
 const boardResource = require('../resources/boardResource');
+const taskResource = require('../resources/taskResource');
 
 exports.all = () => {
     
@@ -109,6 +110,46 @@ exports.destroy = (boardUuid) => {
         })
         .then((result) => {
             resolve(result);
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
+};
+
+exports.tasks = (boardUuid) => {
+
+    return new Promise((resolve, reject) => {
+
+        Boards.findAll({
+            where: {
+                uuid: boardUuid
+            },
+            include: 'tasks'
+        })
+        .then((boards) => {
+            
+            if (boards.length == 0) {
+                resolve(null);
+            } else {
+
+                console.log(boards[0]['tasks'][0]);
+
+                let board = boards[0];
+
+                let tasks = board['tasks']
+                    .map((task) => {
+                        
+                        task['board'] = {
+                            uuid: boardUuid
+                        }
+
+                        return task;
+                    })
+                    .map((task) => taskResource(task));
+
+                resolve(tasks);
+            }
         })
         .catch((err) => {
             reject(err);
