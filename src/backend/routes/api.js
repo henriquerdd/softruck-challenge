@@ -8,5 +8,6 @@ module.exports = (app) => {
         .post(boardsController.store);
 
     app.route('/api/boards/:boardUuid')
-        .get(boardsController.find);
+        .get(boardsController.find)
+        .patch(boardsController.update);
 };

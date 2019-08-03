@@ -61,3 +61,39 @@ exports.find = (boardUuid) => {
         });
     });
 };
+
+exports.update = (data, boardUuid) => {
+    
+    return new Promise((resolve, reject) => {
+
+        Boards.findAll({
+            where: {
+                uuid: boardUuid
+            }
+        })
+        .then((boards) => {
+            
+            if (boards.length == 0) {
+                resolve(null);
+            } else {
+
+                let board = boards[0];
+
+                for(key in data) {
+                    board[key] = data[key];
+                }
+
+                return board.save();
+            }
+        })
+        .then((result) => {
+            
+            resolve(
+                boardResource(result)
+            );
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
+};
