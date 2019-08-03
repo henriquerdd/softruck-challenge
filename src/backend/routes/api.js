@@ -6,4 +6,7 @@ module.exports = (app) => {
     app.route('/api/boards')
         .get(boardsController.all)
         .post(boardsController.store);
+
+    app.route('/api/boards/:boardUuid')
+        .get(boardsController.find);
 };

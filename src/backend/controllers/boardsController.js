@@ -1,27 +1,43 @@
 
-import BoardsRepository from '../repositories/boardsRepository';
-
-let boardsRepo = new BoardsRepository();
+let boardsRepo = require('../repositories/boardsRepository');
 
 exports.all = (req, res) => {
-    boardsRepo.all(res);
+
+    boardsRepo.all()
+        .then((result) => {
+            res.send(result);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({message: "Ocorreu um erro ao buscar seus quadros"});
+        });
 };
 
 exports.store = (req, res) => {
-    res.send(boardsRepo.store(req.body));
+
+    boardsRepo.store(req.body)
+        .then((result) => {
+            res.send(result);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({message: "Ocorreu um erro ao criar seus quadros"});
+        });
 };
 
 exports.find = (req, res) => {
-    let uuid = req.params.uuid;
-    boardsRepo.find(uuid, res);
-};
 
-exports.update = (req, res) => {
-    let uuid = req.params.uuid;
-    boardsRepo.update(uuid, req.body, res);
-};
+    boardsRepo.find(req.params.boardUuid)
+        .then((result) => {
 
-exports.destroy = (req, res) => {
-    let uuid = req.params.uuid;
-    boardsRepo.destroy(uuid, res);
+            if (result == null) {
+                res.status(404).send("Board not found");
+            } else {
+                res.send(result);
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({message: "Ocorreu um erro ao encontrar seu quadro"});
+        });
 };

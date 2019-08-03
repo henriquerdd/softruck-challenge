@@ -38,3 +38,26 @@ exports.store = (board) => {
         });
     });
 };
+
+exports.find = (boardUuid) => {
+
+    return new Promise((resolve, reject) => {
+
+        Boards.findAll({
+            where: {
+                uuid: boardUuid
+            }
+        })
+        .then((boards) => {
+
+            if (boards.length == 0) {
+                resolve(null);
+            } else {
+                resolve(boardResource(boards[0]));
+            }
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
+};
