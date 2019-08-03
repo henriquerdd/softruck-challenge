@@ -1,27 +1,77 @@
 
-import TasksRepository from '../repositories/tasksRepository';
-
-let tasksRepo = new TasksRepository();
+let tasksRepo = require('../repositories/tasksRepository');
 
 exports.all = (req, res) => {
-    return res.send(tasksRepo.all(req));
+
+    tasksRepo.all()
+        .then((result) => {
+            res.send(result);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({message: "Ocorreu um erro ao buscar suas tarefas"});
+        });
 };
 
 exports.store = (req, res) => {
-    res.send(tasksRepo.store(req));
+
+    tasksRepo.store(req.body)
+        .then((result) => {
+            res.status(201).send(result);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({message: "Ocorreu um erro ao criar suas tarefas"});
+        });
 };
 
 exports.find = (req, res) => {
-    let uuid = req.params.uuid;
-    res.send(tasksRepo.find(uuid, req))
+
+    tasksRepo.find(req.params.taskUuid)
+        .then((result) => {
+
+            if (result == null) {
+                res.status(404).send("Task not found");
+            } else {
+                res.send(result);
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({message: "Ocorreu um erro ao encontrar sua tarefa"});
+        });
 };
 
 exports.update = (req, res) => {
-    let uuid = req.params.uuid;
-    res.send(tasksRepo.update(uuid, req))
+
+    tasksRepo.update(req.body, req.params.taskUuid)
+    .then((result) => {
+
+        if (result == null) {
+            res.status(404).send("Task not found");
+        } else {
+            res.send(result);
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send({message: "Ocorreu um erro ao atualizar sua tarefa"});
+    });
 };
 
 exports.destroy = (req, res) => {
-    let uuid = req.params.uuid;
-    res.send(tasksRepo.destroy(uuid, req))
+
+    tasksRepo.destroy(req.params.taskUuid)
+    .then((result) => {
+
+        if (result == null) {
+            res.status(404).send("Task not found");
+        } else {
+            res.status(204).send('');
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send({message: "Ocorreu um erro ao excluir sua tarefa"});
+    });
 };
