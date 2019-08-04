@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Display from '../utils/display';
-import { Link } from 'react-router-dom';
 
 function TaskUpdateInputs(props) {
     
@@ -21,7 +20,7 @@ function TaskUpdateInputs(props) {
                 <textarea name="description" rows="3" value={props.description} onChange={(e) => props.onInputChange("description", e.currentTarget.value)} className="form-control"></textarea>
             </div>
             <div className="form-group col-sm-12">
-                <Link className="btn btn-default" to="/tasks">Voltar</Link>
+                <a href="#" className="btn btn-default" onClick={props.history.goBack}> Voltar </a>
                 <button className="btn btn-primary" onClick={props.onSubmit}>Salvar</button>
             </div>
         </div>
@@ -70,7 +69,7 @@ export default class TasksChanger extends Component {
             });
 
             setTimeout(() => {
-                this.props.history.push('/tasks');
+                this.props.history.goBack();
             }, 1500);
         })
         .catch((err) => {
@@ -149,6 +148,7 @@ export default class TasksChanger extends Component {
                                             onInputChange={this.handleInputChange}
                                             onSubmit={this.handleSubmit}
                                             availableStatus={this.getAvailableStatus()}
+                                            history={this.props.history}
                                         />    
                                     </div>
                                 </div>

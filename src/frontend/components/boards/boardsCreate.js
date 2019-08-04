@@ -15,13 +15,7 @@ function BoardCreateInputs(props) {
                 <textarea name="description" rows="3" value={props.description} onChange={(e) => props.onInputChange("description", e.currentTarget.value)} className="form-control"></textarea>
             </div>
             <div className="form-group col-sm-12">
-                <label htmlFor="tasks"> Tarefas: </label> <br />
-                <select id="boardTasks" name="tasks[]" value={props.boardTasks} onChange={(e) => props.onInputChange("tasks", $('#boardTasks').val())} className="form-control" multiple="multiple">
-                    {props.availableTasks.map((task) => <option value={task.self} key={task.self}>{task.name}</option>)}
-                </select>
-            </div>
-            <div className="form-group col-sm-12">
-                <Link className="btn btn-default" to="/boards">Voltar</Link>
+                <Link className="btn btn-default" to="/">Voltar</Link>
                 <button className="btn btn-primary" onClick={props.onSubmit}>Salvar</button>
             </div>
         </div>
@@ -35,36 +29,19 @@ export default class BoardsCreator extends Component {
         this.state = {
             name: "",
             description: "",
-            tasks: [],
             showMessage: false,
             success: false,
-            message: "",
-            availableTasks: []
+            message: ""
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() {
-
-        this.props.apiClient.getAllTasks()
-        .then((result) => {
-
-            this.setState({
-                availableTasks: result.data
-            });
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-    }
-
-    creatBoard(name, description, tasks) {
+    creatBoard(name, description) {
 
         this.props.apiClient.createBoard({
             'name': name,
-            'description': description,
-            'tasks': tasks
+            'description': description
         })
             .then((result) => {
                 
@@ -96,7 +73,7 @@ export default class BoardsCreator extends Component {
                     });
                 }, 3000);
                 
-                console.log(err);
+                console.error(err);
             });
     }
 
@@ -117,7 +94,7 @@ export default class BoardsCreator extends Component {
                 message: "O campo nome é obrigatório"
             });
         } else {
-            this.creatBoard(this.state.name, this.state.description, this.state.tasks);
+            this.creatBoard(this.state.name, this.state.description);
         }
     }
 
@@ -133,7 +110,7 @@ export default class BoardsCreator extends Component {
                     <div className="clearfix"></div>
                     <div className="box box-primary">
                         <div className="box-body">
-                            <BoardCreateInputs name={this.state.name} description={this.state.description} boardTasks={this.state.tasks} availableTasks={this.state.availableTasks} onInputChange={this.handleInputChange} onSubmit={this.handleSubmit} />
+                            <BoardCreateInputs name={this.state.name} description={this.state.description} onInputChange={this.handleInputChange} onSubmit={this.handleSubmit} />
                         </div>
                     </div>
                 </div>
