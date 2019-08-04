@@ -25,29 +25,31 @@ exports.all = () => {
 
 exports.store = (task) => {
 
+    var board;
+
     return new Promise((resolve, reject) => {
 
-        Tasks.create({
-            name: task.name,
-            description: task.description,
-            status: task.status,
-            boardId: task.boardId
+        Boards.findAll({
+            where: {
+                uuid: task.board
+            }
         })
-        .then((task) => {
+        .then((result) => {
 
-            return new Promise((resolve, reject) => {
-                
-                Boards.findByPk(task.boardId)
-                    .then((board) => {
-                        task['board'] = board;
-                        resolve(task);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
+            if (result.length == 0) {
+                throw "Board not found";
+            }
+
+            board = result[0];
+
+            return Tasks.create({
+                name: task.name,
+                description: task.description,
+                boardId: board.id
             });
         })
         .then((task) => {
+            task['board'] = board;
             resolve(taskResource(task));
         })
         .catch((err) => {
