@@ -4,7 +4,7 @@
   "description": "Um aplicativo que permite gerênciar quadros de tarefas",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=TESTING mocha",
     "build": "webpack --mode production"
   },
   "repository": {
@@ -37,9 +37,12 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
+    "chai": "^4.2.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "mocha": "^6.2.0",
     "sequelize-cli": "^5.5.0",
+    "sinon": "^7.3.2",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6"
   }
