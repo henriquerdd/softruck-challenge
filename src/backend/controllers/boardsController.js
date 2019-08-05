@@ -1,5 +1,8 @@
 
-let boardsRepo = require('../repositories/boardsRepository');
+let BoardsRepository = require('../repositories/boardsRepository');
+
+let { Boards } = require('../models');
+let boardsRepo = new BoardsRepository(Boards);
 
 exports.all = (req, res) => {
 
