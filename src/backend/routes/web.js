@@ -1,7 +1,7 @@
 
 module.exports = (app) => {
 
-    app.get('*', (req, res) => {
-        res.sendFile('/var/www/index.html');
+    app.get(/^(?!\/api.*$).*/, (req, res) => {
+        res.sendFile('/var/www/public/index.html');
     });
 };
