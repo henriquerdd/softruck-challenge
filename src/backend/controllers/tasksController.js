@@ -1,5 +1,10 @@
 
-let tasksRepo = require('../repositories/tasksRepository');
+let TasksRepository = require('../repositories/tasksRepository');
+
+let { Boards } = require('../models');
+let { Tasks } = require('../models');
+
+let tasksRepo = new TasksRepository(Tasks, Boards);
 
 exports.all = (req, res) => {
 
