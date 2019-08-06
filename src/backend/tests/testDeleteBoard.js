@@ -4,38 +4,27 @@ var assert = require('chai').assert;
 
 var { Boards } = require('../models');
 var BoardRespository = require('../repositories/boardsRepository');
-var boardsResource = require('../resources/boardResource');
 
-var boards = [
-    {
-        name: 'Board 1',
-        description: 'First Board',
-        uuid: 'fakeuuid1',
-        createdAt: '2019-01-01 00:00:00',
-        updatedAt: '2019-01-01 00:00:00'
-    }
-];
-
-var expectedResult = boardsResource(boards[0]);
+var expectedResult = 1;
 
 var sandbox;
 
-describe('We can retrieve just one board', () => {
+describe('We can delete boards', () => {
   
     before(() => {
-        
+
         sandbox = sinon.createSandbox();
 
-        sandbox.stub(Boards, 'findAll').returns(new Promise((resolve, reject) => {
-            resolve(boards);
+        sandbox.stub(Boards, 'destroy').returns(new Promise((resolve, reject) => {
+            resolve(1);
         }));
     });
 
-    it('Gives us the desired board', (done) => {
+    it('It deletes the given board', (done) => {
 
         let boardsRepo = new BoardRespository(Boards);
         
-        boardsRepo.find(boards[0].uuid)
+        boardsRepo.destroy('fakeUuid1')
             .then((result) => {
                 assert(result, expectedResult);
                 done();
