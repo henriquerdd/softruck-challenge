@@ -1,4 +1,3 @@
-
 var sinon = require('sinon');
 var assert = require('chai').assert;
 
@@ -13,14 +12,28 @@ var boards = [
         uuid: 'fakeuuid1',
         createdAt: '2019-01-01 00:00:00',
         updatedAt: '2019-01-01 00:00:00'
+    },
+    {
+        name: 'Board 2',
+        description: 'Second Board',
+        uuid: 'fakeuuid2',
+        createdAt: '2019-01-01 00:00:00',
+        updatedAt: '2019-01-01 00:00:00'
+    },
+    {
+        name: 'Board 3',
+        description: 'Third Board',
+        uuid: 'fakeuuid3',
+        createdAt: '2019-01-01 00:00:00',
+        updatedAt: '2019-01-01 00:00:00'
     }
 ];
 
-var expectedResult = boardsResource(boards[0]);
+var expectedResult = boards.map((board) => boardsResource(board));  
 
 var sandbox;
 
-describe('We can retrieve just one board', () => {
+describe('We can retrieve boards', () => {
   
     before(() => {
         
@@ -31,11 +44,11 @@ describe('We can retrieve just one board', () => {
         }));
     });
 
-    it('Gives us the desired board', (done) => {
+    it('Gives us all of it\'s boards', (done) => {
 
         let boardsRepo = new BoardRespository(Boards);
         
-        boardsRepo.find(boards[0].uuid)
+        boardsRepo.all()
             .then((result) => {
                 assert(result, expectedResult);
                 done();
