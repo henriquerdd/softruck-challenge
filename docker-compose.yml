@@ -1,81 +1,19 @@
-version: '2'
+version: '3.7'
 
 services:
 
-### Application Container #######################################
+### APP Container ##########################################
 
     app:
       build:
         context: .
-      image: softruck_challenge_app
+        args:
+          - APP_MNT_PATH=${APP_MNT_PATH}
+      image: softruck_challenge_node
       volumes:
         - ${APP_PATH}:${APP_MNT_PATH}
-
-### Workspace Container #######################################
-
-    workspace:
-      build:
-        context: ./workspace
-        args:
-          - APP_MNT_PATH=${APP_MNT_PATH}
-          - TZ=${WORKSPACE_TIMEZONE}
-      image: softruck_challenge_workspace
-      volumes_from:
-        - app
-      environment:
-        - DB_USERNAME=${DB_USERNAME}
-        - DB_PASSWORD=${DB_PASSWORD}
-      extra_hosts:
-        - "dockerhost:${DOCKER_HOST_IP}"
-      tty: true
-      networks:
-        - frontend
-        - backend
-
-### PHP-FPM Container #######################################
-
-    svc-php-fpm:
-      build:
-        context: ./php-fpm
-        args:
-          - APP_MNT_PATH=${APP_MNT_PATH}
-      image: softruck_challenge_php_fpm
-      volumes_from:
-        - app
-      volumes:
-        - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
-      depends_on:
-        - app
-      expose:
-        - "9000"
-      extra_hosts:
-        - "dockerhost:${DOCKER_HOST_IP}"
-      environment:
-        - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
-        - DB_USERNAME=${DB_USERNAME}
-        - DB_PASSWORD=${DB_PASSWORD}
-      networks:
-        - backend
-
-### Nginx Server Container ##################################
-
-    svc-nginx:
-      build:
-        context: ./nginx
-        args:
-          - PHP_UPSTREAM=svc-php-fpm:9000
-          - APP_MNT_PATH=${APP_MNT_PATH}
-      image: softruck_challenge_nginx
-      volumes_from:
-        - app
-      volumes:
-        - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
-        - ${NGINX_SITES_PATH}:/etc/nginx/sites-available
       ports:
-        - "80:80"
-        - "443:443"
-      depends_on:
-        - svc-php-fpm
+        - "3000:3000"
       networks:
         - frontend
         - backend
@@ -96,20 +34,7 @@ services:
         - "3306:3306"
       networks:
         - backend
-
-### Node Container ##########################################
-
-    svc-node:
-      build:
-        context: ./node
-        args:
-          - APP_MNT_PATH=${APP_MNT_PATH}
-      image: softruck_challenge_node
-      volumes_from:
-        - app
-      networks:
-        - backend
-
+        
 networks:
   frontend:
     driver: "bridge"

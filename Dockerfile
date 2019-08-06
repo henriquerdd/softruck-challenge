@@ -1,7 +1,18 @@
-#This will be used as a volume only container in kubernetes
-#It's only obligation is to copy the apps source code to the persistent disk
-FROM alpine:latest
+FROM node:12.4.0-alpine
 
-#Add source code to appropriate folder
-RUN mkdir /app
-ADD src /app
+ARG APP_MNT_PATH=/app
+ARG DEFAULT_USER=1000
+ARG PORT=3000
+
+RUN mkdir ${APP_MNT_PATH}
+
+ADD src ${APP_MNT_PATH}
+
+USER ${DEFAULT_USER}
+
+WORKDIR ${APP_MNT_PATH}
+
+EXPOSE ${PORT}
+
+CMD ["node", "server.js"]
+
