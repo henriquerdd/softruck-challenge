@@ -84,7 +84,7 @@ module.exports = class BoardsRepository {
     
                     let board = boards[0];
     
-                    for(key in data) {
+                    for(let key in data) {
                         board[key] = data[key];
                     }
     
