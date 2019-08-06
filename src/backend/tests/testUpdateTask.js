@@ -36,13 +36,14 @@ describe('We can update a task', () => {
         
         sandbox = sinon.createSandbox();
 
-        sandbox.stub(Boards, 'findByPk').returns(new Promise((resolve, reject) => {
-            resolve([tasks[0]['board']]);
-        }));
-
         sandbox.stub(Tasks, 'update').returns(new Promise((resolve, reject) => {
             tasks[0]['name'] = newName;
             resolve(tasks[0])
+        }));
+
+        sandbox.stub(Tasks, 'findAll').returns(new Promise((resolve, reject) => {
+            tasks[0]['name'] = newName;
+            resolve(tasks)
         }));
     });
 
