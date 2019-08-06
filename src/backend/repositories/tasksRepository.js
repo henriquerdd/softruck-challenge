@@ -1,7 +1,4 @@
 
-var { Tasks } = require('../models');
-var { Boards } = require('../models');
-
 const taskResource = require('../resources/taskResource');
 
 module.exports = class TasksRepository {
@@ -91,8 +88,6 @@ module.exports = class TasksRepository {
 
     update(data, taskUuid) {
     
-        var task;
-
         return new Promise((resolve, reject) => {
     
             this.tasksModel.update(data, {
@@ -101,12 +96,21 @@ module.exports = class TasksRepository {
                 }
             })
             .then((result) => {
-                task = result;
-                return this.boardsModel.findByPk(task.boardId);
+
+                return this.tasksModel.findAll({
+                    where: {
+                        uuid: taskUuid
+                    },
+                    include: 'board'
+                });
             })
-            .then((board) => {
-                task['board'] = board;
-                resolve(taskResource(task));
+            .then((tasks) => {
+
+                if (tasks.length == 0) {
+                    resolve(null);
+                } else {
+                    resolve(taskResource(tasks[0]));
+                }
             })
             .catch((err) => {
                 reject(err);
