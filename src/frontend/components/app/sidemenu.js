@@ -14,9 +14,9 @@ export default class SideMenu extends Component {
         this.fetchBoards();
     }
 
-    componentWillUpdate() {
-        this.fetchBoards();
-    }
+    // componentWillUpdate() {
+    //     this.fetchBoards();
+    // }
 
     fetchBoards() {
         
